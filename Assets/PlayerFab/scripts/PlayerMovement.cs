@@ -10,13 +10,12 @@ public class PlayerMovement : MonoBehaviour
 
     public float groundDrag;
 
-    public float jumpForce;
+    public float jumpForceHeight;
     public float jumpCooldown;
-    public float airMultiplier;
+    public float jumpForceLength;
     public bool jumpReady;
 
-    public float bobAmplitude;
-    public float bobFrequency;
+    
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -63,8 +62,11 @@ public class PlayerMovement : MonoBehaviour
     private void MyInput()
     {
         //Walking/Running
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        if (grounded)
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+        }  
         //Jumping
         if(Input.GetKey(jumpKey) && jumpReady && grounded)
         {
@@ -77,14 +79,13 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         //calculates the direction of the player's movement.. i hope.
-        if (grounded)
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         
-        //on ground
+        //on ground or not
         if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        //else if (!grounded)
+            
 
     }
 
@@ -105,19 +106,12 @@ public class PlayerMovement : MonoBehaviour
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(transform.up * jumpForceHeight, ForceMode.Impulse);
+        rb.AddForce(moveDirection.normalized * moveSpeed * 10f * jumpForceLength, ForceMode.Force);
     }
     private void ResetJump()
     {
         jumpReady = true;
     }
 
-    private Vector3 FootStepMotion()
-    {
-        Vector3 pos = Vector3.zero;
-        pos.y += Mathf.Sin(Time.time * bobFrequency) * bobAmplitude;
-        pos.y += Mathf.Sin(Time.time * bobFrequency / 2) * bobAmplitude / 2;
-
-        return pos;
-    }
 }
