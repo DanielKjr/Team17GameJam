@@ -22,8 +22,8 @@ public class CameraHolder : MonoBehaviour
     }
     void checkMotion()
     {
-        float forceMagnitude = rb.velocity.magnitude;
-        if (forceMagnitude > 0 )
+        
+        if (rb.velocity.x > 0 || rb.velocity.y > 0)
         {
             FootStepMotion();
         }
@@ -41,4 +41,9 @@ public class CameraHolder : MonoBehaviour
         transform.localPosition += pos;
         return pos;
     }
+    //private void ResetBob() maybe not neccesary with the update looking the way it is
+    //{
+    //    if (transform.localPosition == StartPos) return;
+    //    transform.localPosition =
+    //}
 }
