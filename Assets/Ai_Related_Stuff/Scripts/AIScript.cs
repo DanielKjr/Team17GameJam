@@ -64,6 +64,7 @@ public class AIScript : MonoBehaviour
 		}
 
 		DrawRaycastToggle();
+
 	}
 
 	void NextPoint()
@@ -101,7 +102,7 @@ public class AIScript : MonoBehaviour
 			if(Vector3.Angle(transform.forward, targetDirection) < viewAngle /2)
 			{
 				float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
+			
 				
 				if(!Physics.Raycast(transform.position, targetDirection, distanceToTarget, 6))
 				{
@@ -129,6 +130,8 @@ public class AIScript : MonoBehaviour
 		Vector3 forward = transform.TransformDirection(Vector3.forward) * fovRadius;
 		Debug.DrawRay(transform.position, forward, Color.red);
 	}
+
+
 
 	//These two are for more randomised patrol spots, not used yet
 	Vector3 Patrol(Vector3 origin, float distance, int layermask)
