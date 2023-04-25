@@ -26,6 +26,7 @@ public class PlayerCam : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         interactReady = true;
+        playerCursor.color = Color.black;
     }
 
     // Update is called once per frame
