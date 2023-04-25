@@ -58,7 +58,7 @@ public class PlayerCam : MonoBehaviour
             if (hit.transform.gameObject.tag == "interactable")
             {
                 interactActive = true;
-                playerCursor.color = Color.white;
+                playerCursor.color = Color.red;
             }
             else
                 playerCursor.color = Color.black;
