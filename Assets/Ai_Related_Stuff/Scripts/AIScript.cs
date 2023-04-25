@@ -23,6 +23,11 @@ public class AIScript : MonoBehaviour
 	[SerializeField]
 	private Vector3 randomDirection = new Vector3();
 
+	private AudioSource audioSource;
+	[SerializeField]
+	private float minimumSoundDistance = 0;
+	private Vector3 prevPos;
+
 
 	[SerializeField]
 	private float fovRadius = 0;
@@ -32,6 +37,10 @@ public class AIScript : MonoBehaviour
 	private float viewAngle = 0;
 	[SerializeField]
 	private LayerMask obstructionmask;
+	[SerializeField]
+	private float chaseSpeed = 0;
+	[SerializeField]
+	private float walkSpeed = 0;
 	private bool playerIsSpotted = false;
 	private GameObject playerRef;
 
@@ -39,9 +48,11 @@ public class AIScript : MonoBehaviour
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
+		audioSource = GetComponent<AudioSource>();
 		randomDirection = new Vector3(transform.position.x, transform.position.y);
 		target = targets[index];
 		playerRef = GameObject.FindGameObjectWithTag("Player");
+		prevPos = transform.position;
 		StartCoroutine(FieldOfViewRoutine());
 	}
 
@@ -64,6 +75,8 @@ public class AIScript : MonoBehaviour
 		}
 
 		DrawRaycastToggle();
+		WalkSoundEffect();
+
 	}
 
 	void NextPoint()
@@ -101,15 +114,17 @@ public class AIScript : MonoBehaviour
 			if(Vector3.Angle(transform.forward, targetDirection) < viewAngle /2)
 			{
 				float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
+			
 				
 				if(!Physics.Raycast(transform.position, targetDirection, distanceToTarget, 6))
 				{
 					playerIsSpotted = true;
 					this.target = rangeChecks[0].gameObject;
+					agent.speed = chaseSpeed;
 				}
 				else
 				{
+					agent.speed = walkSpeed;
 					playerIsSpotted = false;
 				}
 			}
@@ -128,6 +143,21 @@ public class AIScript : MonoBehaviour
 	{
 		Vector3 forward = transform.TransformDirection(Vector3.forward) * fovRadius;
 		Debug.DrawRay(transform.position, forward, Color.red);
+	}
+
+	private void WalkSoundEffect()
+	{
+		float moveDist = Vector3.Distance(transform.position, playerRef.transform.position);
+
+		if(moveDist >= minimumSoundDistance)
+		{
+			audioSource.Play();
+
+		}
+		else if(!transform.hasChanged)
+		{
+			audioSource.Stop();
+		}
 	}
 
 	//These two are for more randomised patrol spots, not used yet
