@@ -104,11 +104,11 @@ public class PlayerMovement : MonoBehaviour
     private void MyInput()
     {
         //Walking/Running
-        if (grounded)
-        {
+        
+        
             horizontalInput = Input.GetAxisRaw("Horizontal");
             verticalInput = Input.GetAxisRaw("Vertical");
-        }
+        
         //Jumping
         if (Input.GetKey(jumpKey) && jumpReady && grounded)
         {
@@ -144,27 +144,38 @@ public class PlayerMovement : MonoBehaviour
 
         if (OnSlope())
         {
-            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 15f, ForceMode.Force);
+            if (rb.velocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
-
         //on ground or not
-        if (grounded)
+        else if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
         //else if (!grounded)
 
+        rb.useGravity = !OnSlope();
 
     }
 
     private void SpeedControl()
     {
-        Vector3 flatvel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        //limit velocity if needed
-        if (flatvel.magnitude > moveSpeed)
+        if (OnSlope())
         {
-            Vector3 limitedVel = flatvel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            if (rb.velocity.magnitude > moveSpeed)
+                rb.velocity = rb.velocity.normalized * moveSpeed;
         }
+        else
+        {
+            Vector3 flatvel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            //limit velocity if needed
+            if (flatvel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatvel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
+       
     }
 
     private void Jump()
@@ -180,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
         jumpReady = true;
     }
 
-    private bool OnSlope()
+    public bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
@@ -192,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 GetSlopeMoveDirection()
     {
-        return Vector3.Project(moveDirection, slopeHit.normal).normalized;
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
 }
