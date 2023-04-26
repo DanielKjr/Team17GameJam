@@ -206,6 +206,16 @@ public class PlayerMovement : MonoBehaviour
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
+
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.tag == "Mommy")
+		{
+			//reset game 
+			Debug.Log("We ded");
+		}
+	}
 }
 
 

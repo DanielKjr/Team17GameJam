@@ -6,6 +6,7 @@ TagManager:
   tags:
   - interactable
   - fadetoblack
+  - Mommy
   layers:
   - Default
   - TransparentFX

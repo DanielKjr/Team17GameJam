@@ -41,6 +41,8 @@ public class AIScript : MonoBehaviour
 	private float chaseSpeed = 0;
 	[SerializeField]
 	private float walkSpeed = 0;
+	[SerializeField]
+	private float patrolWaitTime = 0.3f;
 	private bool playerIsSpotted = false;
 	private GameObject playerRef;
 
@@ -52,6 +54,10 @@ public class AIScript : MonoBehaviour
 		randomDirection = new Vector3(transform.position.x, transform.position.y);
 		target = targets[index];
 		playerRef = GameObject.FindGameObjectWithTag("Player");
+
+		//Vector3 rotation = transform.rotation.eulerAngles;
+		//rotation = new Vector3(rotation.x, rotation.y - 180, rotation.z);
+		//agent.transform.rotation = Quaternion.Euler(rotation);
 		prevPos = transform.position;
 		StartCoroutine(FieldOfViewRoutine());
 	}
@@ -75,9 +81,12 @@ public class AIScript : MonoBehaviour
 		}
 
 		DrawRaycastToggle();
+
+		if(transform.hasChanged)
 		WalkSoundEffect();
 
 	}
+
 
 	void NextPoint()
 	{
@@ -91,8 +100,8 @@ public class AIScript : MonoBehaviour
 
 	private IEnumerator FieldOfViewRoutine()
 	{
-		float delay = 0.3f;
-		WaitForSeconds wait = new WaitForSeconds(delay);
+		
+		WaitForSeconds wait = new WaitForSeconds(0.3f);
 
 
 		while (true)
