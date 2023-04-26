@@ -75,13 +75,13 @@ public class PlayerCam : MonoBehaviour
             interactReady = true;
     }
     public void Interact(RaycastHit hit)
-    {  
+    {
         if (active)
         {
             Debug.Log(hit.transform.gameObject.name);
-            hit.transform.gameObject.GetComponent<Interactable>().onInteracted();
+                hit.transform.gameObject.GetComponent<Interactable>().OnInteracted();
         }
-      
+
     }
 }
-   
+

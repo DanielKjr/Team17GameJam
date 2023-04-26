@@ -8,10 +8,19 @@ public class Interactable : MonoBehaviour
     public GameObject player;
     public UnityEvent interactAction;
     public GameObject waypoint;
-    public void onInteracted()
+    public bool temporary;
+    public void OnInteracted()
     {
-        Debug.Log("i done been interacted wit'");
+        if (!temporary)
         GameManager.Instance.OnPlayerTeleport(waypoint);
+
+        if (temporary)
+        {
+            GameManager.Instance.OnPlayerTeleport(waypoint);
+            GameManager.Instance.memories++;
+            this.gameObject.SetActive(false);
+        }
+        
     }
- 
+
 }
