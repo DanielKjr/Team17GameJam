@@ -8,7 +8,20 @@ public class GameManager : SingletonBehaviour<GameManager>
     public GameObject cameraHolder;
     public Image blackScreen;
     public Animator anim;
+    public GameObject exitVictory;
+    public int memories;
 
+    private void Awake()
+    {
+        memories = 0;
+    }
+    public void Update()
+    {
+        if (memories == 2)
+        {
+            exitVictory.SetActive(true);
+        }
+    }
     public void OnPlayerTeleport(GameObject waypoint)
     {
         StartCoroutine(fadeinoutmove(waypoint));
@@ -23,6 +36,11 @@ public class GameManager : SingletonBehaviour<GameManager>
         player.SetActive(true);
         
     }
+    public void Victory()
+    {
+        Debug.Log("you did it");
+    }
+
 
     
 }

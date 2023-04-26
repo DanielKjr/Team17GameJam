@@ -50,7 +50,7 @@ public class AIScript : MonoBehaviour
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
-		audioSource = GetComponent<AudioSource>();
+		audioSource = GetComponentInChildren<AudioSource>();
 		randomDirection = new Vector3(transform.position.x, transform.position.y);
 		target = targets[index];
 		playerRef = GameObject.FindGameObjectWithTag("Player");
