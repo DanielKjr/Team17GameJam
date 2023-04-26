@@ -18,6 +18,6 @@ public class VictoryBox : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-        Debug.Log("did it");
+            GameManager.Instance.Victory();
     }
 }

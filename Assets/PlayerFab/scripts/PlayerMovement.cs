@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+
 
 public enum MovementState { walking, crouching, sprinting }
 public class PlayerMovement : MonoBehaviour
@@ -52,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
+
+    public GameObject deathScreen;
 
     private void Start()
     {
@@ -212,10 +216,15 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (other.gameObject.tag == "Mommy")
 		{
-			//reset game 
-			Debug.Log("We ded");
-		}
+            StartCoroutine(GameOver());
+        }
 	}
+    IEnumerator GameOver()
+    {
+        deathScreen.SetActive(true);
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
 
 
